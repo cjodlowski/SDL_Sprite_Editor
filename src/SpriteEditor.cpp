@@ -41,7 +41,7 @@ void SpriteEditor::Init() {
 
     //if number of frames from user input is greater than sprite sections
     //set ending_frame to last frame in spritesheet (bottom-right)
-    if (ending_frame > num_rows * num_cols) {
+    if (ending_frame >= num_rows * num_cols) {
         ending_frame = (num_cols * num_rows) - 1;
     }
 }
@@ -65,7 +65,7 @@ void SpriteEditor::Run() {
             if (e.type == SDL_QUIT) {
                 printf("Broken out of Run while loop\n");
                 break;
-            }else if(e.type == SDL_KEYDOWN){
+            }/*else if(e.type == SDL_KEYDOWN){
                     if(e.key.keysym.sym == SDLK_q || e.key.keysym.sym == SDLK_ESCAPE) {
                         break;
                     }
@@ -76,15 +76,16 @@ void SpriteEditor::Run() {
                         current_frame++;
                     }
                 }
+                */
         }
 
-        //Caps to 5 FPS to view animation
+        //Caps to 30 FPS to view animation
     
         currentTime = SDL_GetTicks();
 
-        if(currentTime - startTime <= 200) {
+        if(currentTime - startTime <= 33) {
 	      int elapsedTime = currentTime - startTime;
-	      SDL_Delay(200 - elapsedTime);
+	      SDL_Delay(33 - elapsedTime);
 	      currentTime = SDL_GetTicks();
         }
         startTime = currentTime;
@@ -96,7 +97,7 @@ void SpriteEditor::Run() {
 }
 
 void SpriteEditor::Update() {
-    //current_frame++;
+    current_frame++;
 
     if(current_frame > ending_frame || current_frame < starting_frame) {
         current_frame = starting_frame;
@@ -105,17 +106,20 @@ void SpriteEditor::Update() {
     int row = current_frame / num_cols;
     int col = current_frame % num_cols;
 
-    printf("Current Frame; %d Row: %d Col: %d\n", current_frame, row, col);
+    //printf("Current Frame; %d Row: %d Col: %d\n", current_frame, row, col);
 
-    src.x = s_width * row;
-    src.y = s_height * col;
+    src.x = s_width * col;
+    src.y = s_height * row;
     src.w = s_width;
     src.h = s_height;
+
+    //printf("TL: (%d, %d )TR: (%d, %d) BL: (%d, %d) BR: (%d, %d)\n", 
+    //src.x,src.y, src.x + src.w, src.y, src.x, src.y + src.h, src.x + src.w, src.y + src.h);
 
     dest.x = 360 - (s_width / 2);
     dest.y = 240 - (s_height / 2);
     dest.w = s_width;
-    dest.h = s_height;
+    dest.h = s_height ;
 
 }
 
